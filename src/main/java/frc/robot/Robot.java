@@ -7,6 +7,9 @@ package frc.robot;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,6 +25,9 @@ public class Robot extends TimedRobot {
     private Command autonomousCommand;
     private RobotContainer robotContainer;
 
+    private final CANSparkMax motor = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private final DigitalInput sensor = new DigitalInput(1);
+
     /**
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
@@ -31,6 +37,11 @@ public class Robot extends TimedRobot {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
+
+        motor.restoreFactoryDefaults();
+        motor.burnFlash();
+
+        SmartDashboard.putNumber("Power", 0);
     }
 
     /**
@@ -96,6 +107,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+        if (!sensor.get()) {
+            motor.set(SmartDashboard.getNumber("Power", 0));
+        }
     }
     
     @Override
