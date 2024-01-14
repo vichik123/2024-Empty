@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -28,6 +29,8 @@ public class Robot extends TimedRobot {
     private final CANSparkMax motor = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
     private final DigitalInput sensor = new DigitalInput(1);
 
+    private final XboxController controller = new XboxController(0);
+
     /**
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
@@ -39,6 +42,7 @@ public class Robot extends TimedRobot {
         robotContainer = new RobotContainer();
 
         motor.restoreFactoryDefaults();
+        motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         motor.burnFlash();
 
         SmartDashboard.putNumber("Power", 0);
@@ -107,8 +111,18 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        if (!sensor.get()) {
+        if (controller.getLeftTriggerAxis() > 0.1) {
+            if (sensor.get()) {
+                motor.set(SmartDashboard.getNumber("Power", 0));
+            } else {
+                motor.set(0);
+            }
+        } else if (controller.getRightTriggerAxis() > 0.1) {
+            motor.set(-1);
+        } else if (controller.getLeftBumper()) {
             motor.set(SmartDashboard.getNumber("Power", 0));
+        } else {
+            motor.set(0);
         }
     }
     
