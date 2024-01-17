@@ -22,9 +22,6 @@ public class Robot extends TimedRobot {
     private Command autonomousCommand;
     private RobotContainer robotContainer;
 
-    private final TalonFX leftMotor = new TalonFX(2);
-    private final TalonFX rightMotor = new TalonFX(3);
-
     /**
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
@@ -34,12 +31,6 @@ public class Robot extends TimedRobot {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
-
-        leftMotor.getConfigurator().apply(new TalonFXConfiguration());
-        rightMotor.getConfigurator().apply(new TalonFXConfiguration());
-
-        SmartDashboard.setDefaultNumber("Left Power", 0.5);
-        SmartDashboard.setDefaultNumber("Right Power", -0.5);
     }
 
     /**
@@ -67,8 +58,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-        leftMotor.stopMotor();
-        rightMotor.stopMotor();
     }
 
     /**
@@ -107,14 +96,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        leftMotor.setControl(
-                new DutyCycleOut(
-                        SmartDashboard.getNumber("Left Power", 0.5))
-                        .withEnableFOC(true));
-        rightMotor.setControl(
-                new DutyCycleOut(
-                        SmartDashboard.getNumber("Right Power", -0.5))
-                        .withEnableFOC(true));
     }
 
     @Override
