@@ -109,10 +109,12 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         leftMotor.setControl(
                 new DutyCycleOut(
-                        SmartDashboard.getNumber("Left Power", 0.5)));
+                        SmartDashboard.getNumber("Left Power", 0.5))
+                        .withEnableFOC(true));
         rightMotor.setControl(
                 new DutyCycleOut(
-                        SmartDashboard.getNumber("Right Power", -0.5)));
+                        SmartDashboard.getNumber("Right Power", -0.5))
+                        .withEnableFOC(true));
     }
 
     @Override
