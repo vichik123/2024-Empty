@@ -7,8 +7,14 @@ package frc.robot;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.SparkMaxLimitSwitch;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -21,6 +27,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
     private Command autonomousCommand;
     private RobotContainer robotContainer;
+    private AddressableLED led;
+    private AddressableLEDBuffer buffer;
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -31,6 +39,16 @@ public class Robot extends TimedRobot {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
+
+        led = new AddressableLED(1);
+        buffer = new AddressableLEDBuffer(1);
+        led.setLength(buffer.getLength());
+        led.setData(buffer);
+        led.start();
+        for (int i = 0; i < buffer.getLength(); i++) {
+            buffer.setRGB(i, 255, 0, 0);
+        }
+        led.setData(buffer);
     }
 
     /**

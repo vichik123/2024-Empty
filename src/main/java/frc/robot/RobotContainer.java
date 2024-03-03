@@ -4,11 +4,17 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.subsystems.Shooter;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -18,28 +24,15 @@ import frc.robot.subsystems.Shooter;
  */
 public class RobotContainer {
 
-    private final Shooter shooter = new Shooter();
-    private final CommandXboxController controller = new CommandXboxController(0);
-
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        SmartDashboard.putNumber("Top Velocity", 0);
-        SmartDashboard.putNumber("Bottom Velocity", 0);
-
         // Configure the trigger bindings
         configureBindings();
     }
 
     private void configureBindings() {
-        controller
-                .rightTrigger(0.1)
-                .whileTrue(shooter.runShooter(
-                        () -> SmartDashboard.getNumber("Top Velocity", 0),
-                        () -> SmartDashboard.getNumber("Bottom Velocity", 0)
-                ))
-                .onFalse(shooter.runShooter(() -> 0));
     }
 
     /**
